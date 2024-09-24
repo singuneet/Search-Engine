@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Resources Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Include Tailwind CSS -->
+    <style>
+        /* Custom styles */
+        .suggestions {
+            display: none; /* Initially hidden */
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="mb-5 text-2xl font-bold">Student Resources Search</h1>
+        <div class="relative flex justify-center w-full">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchQuery"
+                    placeholder="Enter search term (e.g., studying)"
+                    class="w-80 p-2 pl-10 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+                />
+                <ul id="suggestions" class="suggestions bg-white border border-gray-300 rounded-lg shadow-md"></ul>
+            </div>
+        </div>
+        <button
+            id="searchButton"
+            class="mt-4 p-2 text-sm text-white bg-blue-500 rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+        >
+            Search
+        </button>
+        <div id="results" class="flex flex-col w-80 mt-4"></div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchQuery');
+        const suggestionsList = document.getElementById('suggestions');
+        const searchButton = document.getElementById('searchButton');
+        const resultsSection = document.getElementById('results');
+
+        const studentTopics = [
+            'studying',
+            'time management',
+            'extracurricular activities',
+            'online learning',
+            'study groups',
+            'exams'
+        ];
+
+        searchInput.addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+            if (value) {
+                const filteredSuggestions = studentTopics.filter(topic => topic.toLowerCase().includes(value));
+
+                if (filteredSuggestions.length) {
+                    suggestionsList.classList.remove('hidden'); // Show suggestions
+                    suggestionsList.style.display = 'block'; // Ensure dropdown is visible
+                    filteredSuggestions.forEach(topic => {
+                        const li = document.createElement('li');
+                        li.textContent = topic;
+                        li.className = 'p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer';
+                        li.addEventListener('click', () => {
+                            searchInput.value = topic; // Set input to suggestion
+                            suggestionsList.style.display = 'none'; // Hide suggestions after selection
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                } else {
+                    suggestionsList.style.display = 'none'; // Hide suggestions if none match
+                }
+            } else {
+                suggestionsList.style.display = 'none'; // Hide suggestions if input is empty
+            }
+        });
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim(); // Get the trimmed query
+            performSearch(query); // Perform search only when button is clicked
+        });
+
+        function performSearch(query) {
+            resultsSection.innerHTML = ''; // Clear previous results
+
+            switch (query.toLowerCase()) {
+                case 'studying':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Studying</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Tips:</strong> Find a quiet space, minimize distractions, and use active recall techniques.</li>
+                            <li><strong>Methods:</strong> Pomodoro Technique, spaced repetition, and mind mapping.</li>
+                            <li><strong>Resources:</strong> Study apps (Quizlet, Anki), online courses, and study guides.</li>
+                            <li><strong>Study Groups:</strong> Benefits of collaborative learning and peer support.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'time management':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Time Management</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Strategies:</strong> Prioritization, setting deadlines, and creating schedules.</li>
+                            <li><strong>Tools:</strong> Time tracking apps (Toggl, RescueTime) and calendar tools (Google Calendar).</li>
+                            <li><strong>Benefits:</strong> Reducing stress, improving productivity, and achieving goals.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'extracurricular activities':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Extracurricular Activities</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Importance:</strong> Building skills, networking, and enhancing college applications.</li>
+                            <li><strong>Examples:</strong> Sports, clubs, volunteering, and internships.</li>
+                            <li><strong>Balancing:</strong> Managing time between academics and activities effectively.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'online learning':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Online Learning</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Advantages:</strong> Flexibility, accessibility, and diverse course offerings.</li>
+                            <li><strong>Best Practices:</strong> Staying organized, participating in discussions, and setting goals.</li>
+                            <li><strong>Popular Platforms:</strong> Coursera, Udemy, Khan Academy.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'study groups':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Study Groups</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Benefits:</strong> Enhanced understanding, shared resources, and motivation.</li>
+                            <li><strong>How to Form:</strong> Finding peers, setting a regular schedule, and choosing a location.</li>
+                            <li><strong>Best Practices:</strong> Keeping discussions focused and reviewing material collaboratively.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'exams':
+                    resultsSection.innerHTML = `
+                        <h2 class="font-bold text-lg">Results for: Exams</h2>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Preparation Tips:</strong> Start early, review material, and practice with past exams.</li>
+                            <li><strong>Test-Taking Strategies:</strong> Read questions carefully, manage your time, and stay calm.</li>
+                            <li><strong>Post-Exam:</strong> Reviewing results and understanding areas for improvement.</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    resultsSection.innerHTML = `<p>No results found for "${query}". Please try a different search term.</p>`;
+                    return; // Exit early if no valid query
+            }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!suggestionsList.contains(event.target) && event.target !== searchInput) {
+                suggestionsList.style.display = 'none'; // Hide suggestions
+            }
+        });
+    </script>
+
+</body>
+</html>

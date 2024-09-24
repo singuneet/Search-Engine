@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Search Engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Include Tailwind CSS -->
+    <style>
+        /* Custom styles */
+        .suggestions {
+            display: none; /* Initially hidden */
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="mb-5 text-2xl font-bold">Business Search Engine</h1>
+        <div class="relative flex justify-center w-full">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search for business topics..."
+                    class="w-80 p-2 pl-10 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+                />
+                <ul id="suggestions" class="suggestions bg-white border border-gray-300 rounded-lg shadow-md"></ul>
+            </div>
+        </div>
+        <button
+            id="searchButton"
+            class="mt-4 p-2 text-sm text-white bg-blue-500 rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+        >
+            Search
+        </button>
+        <div id="results" class="flex flex-col w-80 mt-4"></div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsList = document.getElementById('suggestions');
+        const searchButton = document.getElementById('searchButton');
+        const resultsSection = document.getElementById('results');
+
+        const suggestions = [
+            'marketing strategies',
+            'business analytics',
+            'investment opportunities',
+            'entrepreneurship',
+            'financial planning',
+            'customer relationship management',
+            'supply chain management',
+            'business growth',
+            'e-commerce trends',
+            'risk management',
+        ];
+
+        searchInput.addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+            if (value) {
+                const filteredSuggestions = suggestions.filter(suggestion => suggestion.toLowerCase().includes(value));
+
+                if (filteredSuggestions.length) {
+                    suggestionsList.classList.remove('hidden'); // Show suggestions
+                    suggestionsList.style.display = 'block'; // Ensure dropdown is visible
+                    filteredSuggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.textContent = suggestion;
+                        li.className = 'p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer';
+                        li.addEventListener('click', () => {
+                            searchInput.value = suggestion; // Set input to suggestion
+                            suggestionsList.style.display = 'none'; // Hide suggestions after selection
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                } else {
+                    suggestionsList.style.display = 'none'; // Hide suggestions if none match
+                }
+            } else {
+                suggestionsList.style.display = 'none'; // Hide suggestions if input is empty
+            }
+        });
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value;
+            performSearch(query);
+        });
+
+        function performSearch(query) {
+            resultsSection.innerHTML = ''; // Clear previous results
+
+            if (query.toLowerCase() === 'marketing strategies') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Marketing Strategies</h2>
+                    <ul>
+                        <li><strong>Overview:</strong> Effective techniques for promoting products or services.</li>
+                        <li><strong>Digital Marketing:</strong> SEO, social media marketing, content marketing.</li>
+                        <li><strong>Traditional Marketing:</strong> Print ads, television, and radio commercials.</li>
+                        <li><strong>Trends:</strong> Personalized marketing, influencer marketing, AI in marketing.</li>
+                    </ul>
+                    <h3>Recommended Searches:</h3>
+                    <ul>
+                        <li><a href="#">SEO best practices</a></li>
+                        <li><a href="#">Social media trends 2024</a></li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'business analytics') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Business Analytics</h2>
+                    <ul>
+                        <li><strong>Definition:</strong> The practice of iterative, methodical exploration of an organization's data.</li>
+                        <li><strong>Types:</strong> Descriptive, predictive, and prescriptive analytics.</li>
+                        <li><strong>Tools:</strong> Excel, Tableau, Power BI, Google Analytics.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'investment opportunities') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Investment Opportunities</h2>
+                    <ul>
+                        <li><strong>Types:</strong> Stocks, real estate, bonds, mutual funds.</li>
+                        <li><strong>Considerations:</strong> Risk tolerance, investment horizon, market trends.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'entrepreneurship') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Entrepreneurship</h2>
+                    <ul>
+                        <li><strong>Definition:</strong> The process of starting and running a new business.</li>
+                        <li><strong>Challenges:</strong> Funding, competition, marketing.</li>
+                        <li><strong>Resources:</strong> Business plans, mentorship, funding options.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'financial planning') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Financial Planning</h2>
+                    <ul>
+                        <li><strong>Importance:</strong> Helps manage finances and reach financial goals.</li>
+                        <li><strong>Components:</strong> Budgeting, saving, investing, retirement planning.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'customer relationship management') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Customer Relationship Management (CRM)</h2>
+                    <ul>
+                        <li><strong>Definition:</strong> Strategies and tools for managing customer interactions.</li>
+                        <li><strong>Benefits:</strong> Improved customer service, data organization, sales enhancement.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'supply chain management') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Supply Chain Management</h2>
+                    <ul>
+                        <li><strong>Overview:</strong> Management of the flow of goods and services.</li>
+                        <li><strong>Key Components:</strong> Planning, sourcing, manufacturing, delivery.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'business growth') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Business Growth</h2>
+                    <ul>
+                        <li><strong>Strategies:</strong> Market expansion, product diversification, mergers and acquisitions.</li>
+                        <li><strong>Metrics:</strong> Revenue growth, customer acquisition, market share.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'e-commerce trends') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: E-Commerce Trends</h2>
+                    <ul>
+                        <li><strong>Current Trends:</strong> Mobile commerce, personalized shopping, AI integration.</li>
+                        <li><strong>Future Insights:</strong> Subscription models, AR/VR shopping experiences.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'risk management') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Risk Management</h2>
+                    <ul>
+                        <li><strong>Definition:</strong> The process of identifying, assessing, and controlling risks.</li>
+                        <li><strong>Strategies:</strong> Risk avoidance, reduction, sharing, acceptance.</li>
+                    </ul>
+                `;
+            } else {
+                resultsSection.innerHTML = `<p>No results found for "${query}". Please try a different search term.</p>`;
+            }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!suggestionsList.contains(event.target) && event.target !== searchInput) {
+                suggestionsList.style.display = 'none'; // Hide suggestions
+            }
+        });
+    </script>
+
+</body>
+</html>

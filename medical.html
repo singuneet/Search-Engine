@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Include Tailwind CSS -->
+    <style>
+        /* Custom styles */
+        .suggestions {
+            display: none; /* Initially hidden */
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="mb-5 text-2xl font-bold">Medical Search Engine</h1>
+        <div class="relative flex justify-center w-full">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search..."
+                    class="w-80 p-2 pl-10 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+                />
+                <ul id="suggestions" class="suggestions bg-white border border-gray-300 rounded-lg shadow-md"></ul>
+            </div>
+        </div>
+        <button
+            id="searchButton"
+            class="mt-4 p-2 text-sm text-white bg-blue-500 rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+        >
+            Search
+        </button>
+        <div id="results" class="flex flex-col w-80 mt-4"></div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsList = document.getElementById('suggestions');
+        const searchButton = document.getElementById('searchButton');
+        const resultsSection = document.getElementById('results');
+
+        const suggestions = [
+            'diabetes',
+            'cancer',
+            'Parkinson',
+            'Alzheimer',
+            'hypertension',
+            'asthma',
+            'heart disease',
+            'stroke',
+            'epilepsy',
+            'multiple sclerosis',
+        ];
+
+        searchInput.addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+            if (value) {
+                const filteredSuggestions = suggestions.filter(suggestion => suggestion.toLowerCase().includes(value));
+
+                if (filteredSuggestions.length) {
+                    suggestionsList.classList.remove('hidden'); // Show suggestions
+                    suggestionsList.style.display = 'block'; // Ensure dropdown is visible
+                    filteredSuggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.textContent = suggestion;
+                        li.className = 'p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer';
+                        li.addEventListener('click', () => {
+                            searchInput.value = suggestion; // Set input to suggestion
+                            suggestionsList.style.display = 'none'; // Hide suggestions after selection
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                } else {
+                    suggestionsList.style.display = 'none'; // Hide suggestions if none match
+                }
+            } else {
+                suggestionsList.style.display = 'none'; // Hide suggestions if input is empty
+            }
+        });
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value;
+            performSearch(query);
+        });
+
+        function performSearch(query) {
+            resultsSection.innerHTML = ''; // Clear previous results
+
+            if (query.toLowerCase() === 'diabetes') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Diabetes</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Increased thirst, frequent urination, fatigue, blurred vision.</li>
+                        <li><strong>Causes:</strong> Insulin resistance, genetic factors, obesity, lifestyle factors.</li>
+                        <li><strong>Diagnosis:</strong> Blood sugar tests, HbA1c tests, fasting glucose tests.</li>
+                        <li><strong>Treatments:</strong> Insulin therapy, Metformin, lifestyle changes, new drug therapies.</li>
+                        <li><strong>Recent Research:</strong> Advances in insulin pump technology, stem cell research for diabetes.</li>
+                        <li><strong>Case Studies:</strong> Managing diabetes in patients with cardiovascular complications.</li>
+                    </ul>
+                    <h3>Recommended Searches:</h3>
+                    <ul>
+                        <li><a href="#">Diabetes management in children</a></li>
+                        <li><a href="#">Latest insulin therapies</a></li>
+                        <li><a href="#">Long-term complications of diabetes</a></li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'cancer') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Cancer</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Unexplained weight loss, fatigue, pain, skin changes.</li>
+                        <li><strong>Causes:</strong> Genetic factors, lifestyle factors, environmental exposures.</li>
+                        <li><strong>Diagnosis:</strong> Biopsy, imaging tests, blood tests.</li>
+                        <li><strong>Treatments:</strong> Chemotherapy, radiation therapy, surgery, immunotherapy.</li>
+                        <li><strong>Recent Research:</strong> Advances in targeted therapy and personalized medicine.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'parkinson') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Parkinson's Disease</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Tremors, stiffness, slowness of movement, balance problems.</li>
+                        <li><strong>Diagnosis:</strong> Neurological examination, medical history, imaging tests.</li>
+                        <li><strong>Treatments:</strong> Medications, physical therapy, deep brain stimulation.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'alzheimer') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Alzheimer's Disease</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Memory loss, confusion, difficulty with language, mood changes.</li>
+                        <li><strong>Diagnosis:</strong> Cognitive tests, brain imaging, medical history.</li>
+                        <li><strong>Treatments:</strong> Medications, cognitive training, supportive care.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'hypertension') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Hypertension</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Often asymptomatic, but can include headaches, shortness of breath, and nosebleeds.</li>
+                        <li><strong>Causes:</strong> Poor diet, lack of exercise, obesity, excessive alcohol intake, smoking.</li>
+                        <li><strong>Diagnosis:</strong> Blood pressure readings, 24-hour blood pressure monitoring.</li>
+                        <li><strong>Treatments:</strong> Lifestyle changes, diuretics, ACE inhibitors, calcium channel blockers.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'asthma') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Asthma</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Wheezing, coughing, shortness of breath, chest tightness.</li>
+                        <li><strong>Causes:</strong> Allergens, respiratory infections, physical activity, smoke, air pollution.</li>
+                        <li><strong>Diagnosis:</strong> Lung function tests, allergy testing, medical history.</li>
+                        <li><strong>Treatments:</strong> Inhaled corticosteroids, bronchodilators, avoiding triggers.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'heart disease') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Heart Disease</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Chest pain, shortness of breath, palpitations, fatigue.</li>
+                        <li><strong>Causes:</strong> High blood pressure, high cholesterol, smoking, diabetes, obesity.</li>
+                        <li><strong>Diagnosis:</strong> ECG, echocardiogram, stress testing, angiography.</li>
+                        <li><strong>Treatments:</strong> Lifestyle changes, medications, surgery, cardiac rehabilitation.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'stroke') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Stroke</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Sudden numbness, confusion, trouble speaking, vision issues.</li>
+                        <li><strong>Causes:</strong> Blood clots, burst blood vessels, high blood pressure, atrial fibrillation.</li>
+                        <li><strong>Diagnosis:</strong> CT or MRI scans, blood tests, neurological exams.</li>
+                        <li><strong>Treatments:</strong> Clot-busting drugs, rehabilitation therapy, lifestyle changes.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'epilepsy') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Epilepsy</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Seizures, temporary confusion, staring spells, unusual behavior.</li>
+                        <li><strong>Causes:</strong> Genetic factors, head trauma, brain infections, developmental disorders.</li>
+                        <li><strong>Diagnosis:</strong> EEG, MRI, medical history.</li>
+                        <li><strong>Treatments:</strong> Anticonvulsant medications, lifestyle changes, surgery in some cases.</li>
+                    </ul>
+                `;
+            } else if (query.toLowerCase() === 'multiple sclerosis') {
+                resultsSection.innerHTML = `
+                    <h2>Results for: Multiple Sclerosis</h2>
+                    <ul>
+                        <li><strong>Symptoms:</strong> Fatigue, numbness, difficulty walking, vision problems.</li>
+                        <li><strong>Causes:</strong> Immune system attack on the nervous system, genetic factors, environmental factors.</li>
+                        <li><strong>Diagnosis:</strong> MRI, lumbar puncture, neurological exam.</li>
+                        <li><strong>Treatments:</strong> Disease-modifying therapies, corticosteroids, symptom management.</li>
+                    </ul>
+                `;
+            } else {
+                resultsSection.innerHTML = `<p>No results found for "${query}". Please try a different search term.</p>`;
+            }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!suggestionsList.contains(event.target) && event.target !== searchInput) {
+                suggestionsList.style.display = 'none'; // Hide suggestions
+            }
+        });
+    </script>
+
+</body>
+</html>

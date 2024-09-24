@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to CSS file -->
+</head>
+<body>
+
+    <header>
+        <h1>Enter Your Details</h1>
+    </header>
+
+    <main>
+        <!-- User Age Input -->
+        <form>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="1" max="120" required>
+            <br>
+
+            <!-- Gender Selection -->
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+        </form>
+
+        <!-- Professions as Hyperlinks -->
+        <h2>Select Your Profession:</h2>
+        <ul>
+            <li><a href="student.html">Student</a></li>
+            <li><a href="it.html">IT</a></li>
+            <li><a href="medical.html">Medical</a></li>
+            <li><a href="business.html">Business</a></li>
+        </ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Website</p>
+    </footer>
+
+</body>
+</html>

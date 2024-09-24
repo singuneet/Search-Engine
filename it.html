@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Resources Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Include Tailwind CSS -->
+    <style>
+        /* Custom styles */
+        .suggestions {
+            display: none; /* Initially hidden */
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="mb-5 text-2xl font-bold">IT Resources Search</h1>
+        <div class="relative flex justify-center w-full">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchQuery"
+                    placeholder="Enter search term (e.g., programming)"
+                    class="w-80 p-2 pl-10 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+                />
+                <ul id="suggestions" class="suggestions bg-white border border-gray-300 rounded-lg shadow-md"></ul>
+            </div>
+        </div>
+        <button
+            id="searchButton"
+            class="mt-4 p-2 text-sm text-white bg-blue-500 rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+        >
+            Search
+        </button>
+        <div id="results" class="flex flex-col w-80 mt-4"></div>
+    </div>
+
+    <script>
+        const searchQuery = document.getElementById('searchQuery');
+        const suggestionsList = document.getElementById('suggestions');
+        const searchButton = document.getElementById('searchButton');
+        const resultsSection = document.getElementById('results');
+
+        const itTopics = [
+            'programming',
+            'networking',
+            'cybersecurity',
+            'cloud computing',
+            'data science',
+            'machine learning'
+        ];
+
+        searchQuery.addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+            if (query) {
+                const filteredSuggestions = itTopics.filter(topic => topic.toLowerCase().includes(query));
+
+                if (filteredSuggestions.length) {
+                    suggestionsList.classList.remove('hidden'); // Show suggestions
+                    suggestionsList.style.display = 'block'; // Ensure dropdown is visible
+                    filteredSuggestions.forEach(topic => {
+                        const li = document.createElement('li');
+                        li.textContent = topic;
+                        li.className = 'p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer';
+                        li.addEventListener('click', () => {
+                            searchQuery.value = topic; // Set input to suggestion
+                            suggestionsList.style.display = 'none'; // Hide suggestions after selection
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                } else {
+                    suggestionsList.style.display = 'none'; // Hide suggestions if none match
+                }
+            } else {
+                suggestionsList.style.display = 'none'; // Hide suggestions if input is empty
+            }
+        });
+
+        searchButton.addEventListener('click', () => {
+            const query = searchQuery.value;
+            performSearch(query);
+        });
+
+        function performSearch(query) {
+            resultsSection.innerHTML = ''; // Clear previous results
+
+            switch (query.toLowerCase()) {
+                case 'programming':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Programming</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> The process of creating instructions for computers using programming languages.</li>
+                            <li><strong>Languages:</strong> Python, Java, JavaScript, C++, Ruby, and PHP.</li>
+                            <li><strong>Resources:</strong> Online courses, coding bootcamps, and documentation.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'networking':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Networking</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> The practice of connecting computers and other devices to share resources.</li>
+                            <li><strong>Types:</strong> Local Area Network (LAN), Wide Area Network (WAN), and Virtual Private Network (VPN).</li>
+                            <li><strong>Protocols:</strong> TCP/IP, HTTP, FTP, and SMTP.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'cybersecurity':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Cybersecurity</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> The practice of protecting systems, networks, and programs from digital attacks.</li>
+                            <li><strong>Threats:</strong> Malware, phishing, ransomware, and social engineering.</li>
+                            <li><strong>Best Practices:</strong> Use strong passwords, enable two-factor authentication, and keep software updated.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'cloud computing':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Cloud Computing</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> The delivery of computing services over the internet.</li>
+                            <li><strong>Models:</strong> Infrastructure as a Service (IaaS), Platform as a Service (PaaS), and Software as a Service (SaaS).</li>
+                            <li><strong>Providers:</strong> Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'data science':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Data Science</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> A field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from data.</li>
+                            <li><strong>Techniques:</strong> Statistical analysis, machine learning, data mining, and data visualization.</li>
+                            <li><strong>Tools:</strong> Python, R, SQL, and Hadoop.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'machine learning':
+                    resultsSection.innerHTML = `
+                        <h2>Results for: Machine Learning</h2>
+                        <ul>
+                            <li><strong>Definition:</strong> A subset of artificial intelligence that involves the use of algorithms and statistical models to perform tasks without explicit instructions.</li>
+                            <li><strong>Types:</strong> Supervised learning, unsupervised learning, and reinforcement learning.</li>
+                            <li><strong>Applications:</strong> Image recognition, natural language processing, and predictive analytics.</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    resultsSection.innerHTML = `<p>No results found for "${query}". Please try a different search term.</p>`;
+                    break;
+            }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!suggestionsList.contains(event.target) && event.target !== searchQuery) {
+                suggestionsList.style.display = 'none'; // Hide suggestions
+            }
+        });
+    </script>
+
+</body>
+</html>
